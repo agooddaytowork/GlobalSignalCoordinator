@@ -235,8 +235,6 @@ void GlobalSignalCoordinatorBasis::In(const GlobalSignal &aGlobalSignal)
                 anIf(GlobalSignalCoordinatorBasisDbgEn, anAck("SerialPortDataProcessorBasis::readyToWork"));
 
                 QString WhoIsReadyToWork = aGlobalSignal.Data.toString();
-
-                anAck("GATE " << WhoIsReadyToWork);
                 if (WhoIsReadyToWork == UHV2SerialPortDataProcessorObjName)
                 {
                     isUHV2SerialPortDataProcessorReady = true;
@@ -262,7 +260,6 @@ void GlobalSignalCoordinatorBasis::In(const GlobalSignal &aGlobalSignal)
                         && (aGlobalSignalTypeToInt == CanDataProcessorBasis::readyToWork))
             {
                 anIf(GlobalSignalCoordinatorBasisDbgEn, anAck("CanDataProcessorBasis::Notification"));
-                anAck("GATE " << aGlobalSignal.Data.toString());
                 if (aGlobalSignal.Data.toString() == CanDataProcessorObjName)
                 {
                     isCanDataProcessorReady = true;
