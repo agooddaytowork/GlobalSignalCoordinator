@@ -60,6 +60,19 @@ void CanDataProcessorBasis::runningCanDataProcessorOnEntry()
                 break;
             }
         }
+        else if (currentGlobalSignalTypeTypeName == QStringLiteral("CanDataProcessorBasis::Notification"))
+        {
+            switch (currentGlobalSignal.Type.toInt()) {
+            case readyToWork:
+            {
+                anIf(CanDataProcessorBasisDbgEn, anAck("readyToWork"));
+                emit Out(GlobalSignal(currentGlobalSignal));
+                break;
+            }
+            default:
+                break;
+            }
+        }
         else if (currentGlobalSignalTypeTypeName == QStringLiteral("CanBusWorkerBasis::Data"))
         {
             switch (currentGlobalSignal.Type.toInt()) {

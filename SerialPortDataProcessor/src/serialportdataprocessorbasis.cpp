@@ -133,6 +133,19 @@ void SerialPortDataProcessorBasis::runningSerialPortDataProcessorOnEntry()
                 break;
             }
         }
+        else if (currentGlobalSignalTypeTypeName == QStringLiteral("SerialPortDataProcessorBasis::Notification"))
+        {
+            switch (currentGlobalSignal.Type.toInt()) {
+            case readyToWork:
+            {
+                anIf(SerialPortDataProcessorBasisDbgEn, anAck("readyToWork"));
+                emit Out(GlobalSignal(currentGlobalSignal));
+                break;
+            }
+            default:
+                break;
+            }
+        }
         else if (currentGlobalSignalTypeTypeName == QStringLiteral("SerialPortWorkerBasis::Data"))
         {
             switch (currentGlobalSignal.Type.toInt()) {
