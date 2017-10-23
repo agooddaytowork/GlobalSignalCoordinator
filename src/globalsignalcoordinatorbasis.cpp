@@ -329,8 +329,11 @@ bool GlobalSignalCoordinatorBasis::areWorkersReady()
             && isUHV4SerialPortWorkerReady
             && isUHV2SerialPortDataProcessorReady
             && isUHV4SerialPortDataProcessorReady
+        #ifndef __anWINOS__
             && isCanBusWorkerReady
-            && isCanDataProcessorReady;
+            && isCanDataProcessorReady
+        #endif
+            ;
 }
 
 const QMetaEnum GlobalSignalCoordinatorBasis::DataMetaEnum = QMetaEnum::fromType<GlobalSignalCoordinatorBasis::Data>();
