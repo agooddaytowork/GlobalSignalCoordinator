@@ -310,6 +310,10 @@ void SerialPortDataProcessorBasis::errorSerialPortDataProcessorOnEntry()
 void SerialPortDataProcessorBasis::In(const GlobalSignal &aGlobalSignal)
 {
     pushAGlobalSignalIntoPrioritizedBuffer(aGlobalSignal);
+    if (currentStateName == QStringLiteral("idleSerialPortDataProcessor"))
+    {
+        emit GlobalSignalExecutionRequested();
+    }
 }
 
 bool SerialPortDataProcessorBasis::openLocalDatabaseConnection()

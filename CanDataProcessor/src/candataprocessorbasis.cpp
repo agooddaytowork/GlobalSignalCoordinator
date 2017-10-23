@@ -144,6 +144,10 @@ void CanDataProcessorBasis::errorCanDataProcessorOnEntry()
 void CanDataProcessorBasis::In(const GlobalSignal &aGlobalSignal)
 {
     pushAGlobalSignalIntoPrioritizedBuffer(aGlobalSignal);
+    if (currentStateName == QStringLiteral("idleCanDataProcessor"))
+    {
+        emit GlobalSignalExecutionRequested();
+    }
 }
 
 void CanDataProcessorBasis::autoSignaller()
