@@ -7,7 +7,7 @@
 class idleGlobalSignalCoordinator : public QState
 {
 public:
-    idleGlobalSignalCoordinator(GlobalSignalCoordinatorBasis *parentBasis, QState *paret = nullptr);
+    idleGlobalSignalCoordinator(GlobalSignalCoordinatorBasis *parentBasis, QState *parent = nullptr);
 protected:
     void onEntry(QEvent *) override;
     void onExit(QEvent *) override;

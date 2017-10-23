@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
         piLocalDatabaseThread->start();
         uhv2workerThread->start();
         uhv4workerThread->start();
-        uhv2pvicollectorThread->start();
-        uhv4pvicollectorThread->start();
+        uhv2dataprocessorThread->start();
+        uhv4dataprocessorThread->start();
         canbusworkerThread->start();
         candataprocessorThread->start();
     });

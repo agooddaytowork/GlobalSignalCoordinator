@@ -320,8 +320,8 @@ bool GlobalSignalCoordinatorBasis::areWorkersReady()
     return isPiLocalDBWorkerReady
             && isUHV2SerialPortWorkerReady
             && isUHV4SerialPortWorkerReady
-            && isUHV2SerialPortDataProcessorBasisReady
-            && isUHV4SerialPortDataProcessorBasisReady
+            && isUHV2SerialPortDataProcessorReady
+            && isUHV4SerialPortDataProcessorReady
             && isCanBusWorkerReady
             && isCanDataProcessorReady;
 }

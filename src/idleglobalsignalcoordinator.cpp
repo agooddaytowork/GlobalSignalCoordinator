@@ -1,6 +1,6 @@
 #include "idleglobalsignalcoordinator.h"
 
-idleGlobalSignalCoordinator::idleGlobalSignalCoordinator(GlobalSignalCoordinatorBasis *parentBasis, QState *paret) :
+idleGlobalSignalCoordinator::idleGlobalSignalCoordinator(GlobalSignalCoordinatorBasis *parentBasis, QState *parent) :
     QState(parent),
     basisptr(parentBasis)
 {
