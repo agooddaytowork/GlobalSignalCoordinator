@@ -12,6 +12,8 @@ void runningGlobalSignalCoordinator::onEntry(QEvent *)
 {
     anIf(GlobalSignalCoordinatorBasisDbgEn, anTrk("runningGlobalSignalCoordinator Entered"));
     basisptr->currentStateName = objectName();
+    qApp->processEvents();
+    basisptr->runningGlobalSignalCoordinatorOnEntry();
 }
 
 void runningGlobalSignalCoordinator::onExit(QEvent *)

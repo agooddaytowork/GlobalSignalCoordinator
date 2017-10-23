@@ -3,8 +3,8 @@
 #include "piLocalDBWorker/src/pilocaldbworker.h"
 #include "SerialPortWorker/src/serialportworker.h"
 #include "SerialPortDataProcessor/src/serialportdataprocessor.h"
-#include "CanDataProcessor/src/candataprocessor.h"
 #include "CanBusWorker/src/canbusworker.h"
+#include "CanDataProcessor/src/candataprocessor.h"
 #include "src/globalsignalcoordinator.h"
 
 int main(int argc, char *argv[])
@@ -28,24 +28,24 @@ int main(int argc, char *argv[])
     canbusworker->setObjectName(CanBusWorkerObjName);
     CanDataProcessor * candataprocessor = new CanDataProcessor();
     candataprocessor->setObjectName(CanDataProcessorObjName);
-    SmallCoordinator * smallcoordinator = new SmallCoordinator();
-    smallcoordinator->setObjectName(SmallCoordinatorObjName);
+    GlobalSignalCoordinator * coordinator = new GlobalSignalCoordinator();
+    coordinator->setObjectName(GlobalSignalCoordinatorObjName);
 
-    QObject::connect(uhv2worker, &SerialPortWorker::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(uhv4worker, &SerialPortWorker::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(uhv2dataprocessor, &SerialPortDataProcessor::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(uhv4dataprocessor, &SerialPortDataProcessor::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(piLocalDatabase, &piLocalDBWorker::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(canbusworker, &CanBusWorker::Out, smallcoordinator, &SmallCoordinator::In);
-    QObject::connect(candataprocessor, &CanDataProcessor::Out, smallcoordinator, &SmallCoordinator::In);
+    QObject::connect(uhv2worker, &SerialPortWorker::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(uhv4worker, &SerialPortWorker::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(uhv2dataprocessor, &SerialPortDataProcessor::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(uhv4dataprocessor, &SerialPortDataProcessor::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(piLocalDatabase, &piLocalDBWorker::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(canbusworker, &CanBusWorker::Out, coordinator, &GlobalSignalCoordinator::In);
+    QObject::connect(candataprocessor, &CanDataProcessor::Out, coordinator, &GlobalSignalCoordinator::In);
 
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToPiLocalDBWorker, piLocalDatabase, &piLocalDBWorker::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToUHV2SerialPortWorker, uhv2worker, &SerialPortWorker::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToUHV4SerialPortWorker, uhv4worker, &SerialPortWorker::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToUHV2SerialPortDataProcessor, uhv2dataprocessor, &SerialPortDataProcessor::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToUHV4SerialPortDataProcessor, uhv4dataprocessor, &SerialPortDataProcessor::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToCanBusWorker, canbusworker, &CanBusWorker::In);
-    QObject::connect(smallcoordinator, &SmallCoordinator::ToCanDataProcessor, candataprocessor, &CanDataProcessor::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToPiLocalDBWorker, piLocalDatabase, &piLocalDBWorker::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToUHV2SerialPortWorker, uhv2worker, &SerialPortWorker::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToUHV4SerialPortWorker, uhv4worker, &SerialPortWorker::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToUHV2SerialPortDataProcessor, uhv2dataprocessor, &SerialPortDataProcessor::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToUHV4SerialPortDataProcessor, uhv4dataprocessor, &SerialPortDataProcessor::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToCanBusWorker, canbusworker, &CanBusWorker::In);
+    QObject::connect(coordinator, &GlobalSignalCoordinator::ToCanDataProcessor, candataprocessor, &CanDataProcessor::In);
 
     QThread * uhv2workerThread = new QThread();
     QThread * uhv4workerThread = new QThread();
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     QThread * piLocalDatabaseThread = new QThread();
     QThread * canbusworkerThread = new QThread();
     QThread * candataprocessorThread = new QThread();
-    QThread * smallcoordinatorThread = new QThread();
+    QThread * coordinatorThread = new QThread();
 
     uhv2worker->moveToThread(uhv2workerThread);
     uhv4worker->moveToThread(uhv4workerThread);
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     piLocalDatabase->moveToThread(piLocalDatabaseThread);
     canbusworker->moveToThread(canbusworkerThread);
     candataprocessor->moveToThread(candataprocessorThread);
-    smallcoordinator->moveToThread(smallcoordinatorThread);
+    coordinator->moveToThread(coordinatorThread);
 
     QObject::connect(uhv2workerThread, &QThread::started, uhv2worker, &SerialPortWorker::start);
     QObject::connect(uhv4workerThread, &QThread::started, uhv4worker, &SerialPortWorker::start);
@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
     QObject::connect(piLocalDatabaseThread, &QThread::started, piLocalDatabase, &piLocalDBWorker::start);
     QObject::connect(canbusworkerThread, &QThread::started, canbusworker, &CanBusWorker::start);
     QObject::connect(candataprocessorThread, &QThread::started, candataprocessor, &CanDataProcessor::start);
-    QObject::connect(smallcoordinatorThread, &QThread::started, smallcoordinator, &SmallCoordinator::start);
+    QObject::connect(coordinatorThread, &QThread::started, coordinator, &GlobalSignalCoordinator::start);
 
-    QObject::connect(smallcoordinator, &SmallCoordinator::getReady, [&](){
+    QObject::connect(coordinator, &GlobalSignalCoordinator::startWorkers, [&](){
         piLocalDatabaseThread->start();
         uhv2workerThread->start();
         uhv4workerThread->start();
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
         candataprocessorThread->start();
     });
 
-    smallcoordinatorThread->start();
+    coordinatorThread->start();
 
     return a.exec();
 }

@@ -55,7 +55,6 @@ public:
     static const QMetaEnum NotificationMetaEnum;
 
     void uninitiatedGlobalSignalCoordinatorOnEntry();
-    void idleGlobalSignalCoordinatorOnEntry();
     void runningGlobalSignalCoordinatorOnEntry();
     void errorGlobalSignalCoordinatorOnEntry();
 
@@ -82,13 +81,12 @@ private:
     bool isUHV4SerialPortDataProcessorReady = false;
     bool isCanBusWorkerReady = false;
     bool isCanDataProcessorReady =false;
-    bool isAllWorkersReady = false;
 
     void initiate();
     void dispose();
     void setError(const Error & anErrorType, const QString & anErrorInfo);
     void clearCache();
-    void checkIfAllWorkersReady();
+    bool areWorkersReady();
 };
 
 #endif // GLOBALSIGNALCOORDINATORBASIS_H
