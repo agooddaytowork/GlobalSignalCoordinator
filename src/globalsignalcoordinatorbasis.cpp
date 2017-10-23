@@ -61,7 +61,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case enableAutoSignallerForUHV2SerialPort:
                     {
                         GlobalSignal enableAutoSignaller4UHV2SerialPort;
-                        enableAutoSignaller4UHV2SerialPort.Type = QVariant::fromValue(enableAutoSignallerForUHV2SerialPort);
+                        enableAutoSignaller4UHV2SerialPort.Type = QVariant::fromValue(SerialPortDataProcessorBasis::enableAutoSignaller);
                         enableAutoSignaller4UHV2SerialPort.DstStrs.append(UHV2SerialPortDataProcessorObjName);
                         emit ToUHV2SerialPortDataProcessor(enableAutoSignaller4UHV2SerialPort);
                         break;
@@ -69,7 +69,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case enableAutoSignallerForUHV4SerialPort:
                     {
                         GlobalSignal enableAutoSignaller4UHV4SerialPort;
-                        enableAutoSignaller4UHV4SerialPort.Type = QVariant::fromValue(enableAutoSignallerForUHV4SerialPort);
+                        enableAutoSignaller4UHV4SerialPort.Type = QVariant::fromValue(SerialPortDataProcessorBasis::enableAutoSignaller);
                         enableAutoSignaller4UHV4SerialPort.DstStrs.append(UHV4SerialPortDataProcessorObjName);
                         emit ToUHV4SerialPortDataProcessor(enableAutoSignaller4UHV4SerialPort);
                         break;
@@ -77,7 +77,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case enableAutoSignallerForCanBus:
                     {
                         GlobalSignal enableAutoSignaller4CanBus;
-                        enableAutoSignaller4CanBus.Type = QVariant::fromValue(enableAutoSignallerForCanBus);
+                        enableAutoSignaller4CanBus.Type = QVariant::fromValue(CanDataProcessorBasis::enableAutoSignaller);
                         enableAutoSignaller4CanBus.DstStrs.append(CanDataProcessorObjName);
                         emit ToCanDataProcessor(enableAutoSignaller4CanBus);
                         break;
@@ -97,7 +97,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case disableAutoSignallerForUHV2SerialPort:
                     {
                         GlobalSignal disableAutoSignaller4UHV2SerialPort;
-                        disableAutoSignaller4UHV2SerialPort.Type = QVariant::fromValue(disableAutoSignallerForUHV2SerialPort);
+                        disableAutoSignaller4UHV2SerialPort.Type = QVariant::fromValue(SerialPortDataProcessorBasis::disableAutoSignaller);
                         disableAutoSignaller4UHV2SerialPort.DstStrs.append(UHV2SerialPortDataProcessorObjName);
                         emit ToUHV2SerialPortDataProcessor(disableAutoSignaller4UHV2SerialPort);
                         break;
@@ -105,7 +105,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case disableAutoSignallerForUHV4SerialPort:
                     {
                         GlobalSignal disableAutoSignaller4UHV4SerialPort;
-                        disableAutoSignaller4UHV4SerialPort.Type = QVariant::fromValue(disableAutoSignallerForUHV4SerialPort);
+                        disableAutoSignaller4UHV4SerialPort.Type = QVariant::fromValue(SerialPortDataProcessorBasis::disableAutoSignaller);
                         disableAutoSignaller4UHV4SerialPort.DstStrs.append(UHV4SerialPortDataProcessorObjName);
                         emit ToUHV4SerialPortDataProcessor(disableAutoSignaller4UHV4SerialPort);
                         break;
@@ -113,7 +113,7 @@ void GlobalSignalCoordinatorBasis::runningGlobalSignalCoordinatorOnEntry()
                     case disableAutoSignallerForCanBus:
                     {
                         GlobalSignal disableAutoSignaller4CanBus;
-                        disableAutoSignaller4CanBus.Type = QVariant::fromValue(disableAutoSignallerForCanBus);
+                        disableAutoSignaller4CanBus.Type = QVariant::fromValue(CanDataProcessorBasis::disableAutoSignaller);
                         disableAutoSignaller4CanBus.DstStrs.append(CanDataProcessorObjName);
                         emit ToCanDataProcessor(disableAutoSignaller4CanBus);
                         break;
@@ -269,8 +269,11 @@ void GlobalSignalCoordinatorBasis::In(const GlobalSignal &aGlobalSignal)
                     anIf(GlobalSignalCoordinatorBasisDbgEn, anVar(isCanDataProcessorReady));
                 }
             }
-            emit InitiationRequested();
-        }
+            if (areWorkersReady())
+            {
+                emit InitiationRequested();
+            }
+        }        
     }
     else
     {
